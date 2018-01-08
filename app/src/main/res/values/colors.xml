@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+    <!-- 中灰色 -->
+    <color name="gray_color">#999999</color>
+    <!--主题色调-->
+    <color name="theme_color">#0082F6</color>
+    <!-- 首页tab文字 -->
+    <color name="main_tab_text_color_unselect">@color/gray_color</color>
+    <color name="main_tab_text_color_select">@color/theme_color</color>
+
+</resources>

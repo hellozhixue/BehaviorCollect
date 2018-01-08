@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 内容布局 -->
+
+    <FrameLayout
+        android:id="@+id/fl_activity_main_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation"></FrameLayout>
+
+    <!-- 底部导航栏 -->
+
+    <LinearLayout
+        android:id="@+id/ll_main_tab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#FFFFFFFF"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_main_tab_home"
+            style="@style/main_tab_ll_style"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/iv_tab_home"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:src="@drawable/tab1_ico_selector" />
+
+            <TextView
+                android:id="@+id/tv_tab_home"
+                style="@style/main_tab_ll_tv_style"
+                android:layout_gravity="center"
+                android:text="借款" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_main_tab_product"
+            style="@style/main_tab_ll_style"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/iv_tab_product"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:src="@drawable/tab2_ico_selector" />
+
+            <TextView
+                android:id="@+id/tv_tab_product"
+                style="@style/main_tab_ll_tv_style"
+                android:layout_gravity="center"
+                android:text="服务" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_main_tab_my"
+            style="@style/main_tab_ll_style"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/iv_tab_my"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:src="@drawable/tab3_ico_selector" />
+
+            <TextView
+                android:id="@+id/tv_tab_my"
+                style="@style/main_tab_ll_tv_style"
+                android:layout_gravity="center"
+                android:gravity="bottom"
+                android:text="我的" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
