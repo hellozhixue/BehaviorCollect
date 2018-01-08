@@ -22,6 +22,7 @@
         android:background="#FFFFFFFF"
         android:gravity="center"
         android:text="服务"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 
 </LinearLayout>

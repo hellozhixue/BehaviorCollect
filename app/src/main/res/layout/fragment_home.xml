@@ -13,6 +13,7 @@
         android:background="#E2E2E2" />
 
     <TextView
+        android:layout_gravity="center"
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -22,6 +23,7 @@
         android:background="#FFFFFFFF"
         android:gravity="center"
         android:text="首页"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 
 </LinearLayout>

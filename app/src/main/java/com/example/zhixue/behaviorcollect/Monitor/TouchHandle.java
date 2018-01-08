@@ -17,12 +17,12 @@ import java.util.ArrayList;
 /**
  * Created by wangzhixue  on 2017/12/26.
  */
-public  class ClickHandle {
+public  class TouchHandle {
 
 	//统计埋点
-	private static String mClassName = ClickHandle.class.getSimpleName();
+	private static String mClassName = TouchHandle.class.getSimpleName();
 	private ArrayList<OnViewClickListener> mListeners;
-	public ClickHandle(){
+	public TouchHandle(){
 	}
 
     public  void eventViewHit(Activity activity, MotionEvent event) {

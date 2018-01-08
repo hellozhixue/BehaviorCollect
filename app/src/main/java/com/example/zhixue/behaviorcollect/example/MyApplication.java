@@ -10,11 +10,24 @@ import com.example.zhixue.behaviorcollect.Monitor.MonitorActivityLifecycleCallba
  */
 
 public class MyApplication extends Application {
+    private static MyApplication mInstance;//Application单例
+
+    /**
+     * 获得Application单例对象
+     */
+    public static MyApplication getInstance() {
+        return mInstance;
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         if(Build.VERSION.SDK_INT > 14) {  //埋点统计回调监听
             this.registerActivityLifecycleCallbacks(new MonitorActivityLifecycleCallbacks());
         }
+
+         /*其他内容初始化*/
+        mInstance = this;
     }
 }

@@ -14,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.example.zhixue.behaviorcollect.Monitor.Result.onAppStart;
+import static com.example.zhixue.behaviorcollect.Monitor.Result.onClickButton;
+import static com.example.zhixue.behaviorcollect.Monitor.Result.onPageStart;
 
 /**
  * Created by wangzhixue  on 2017/12/26.
@@ -26,16 +29,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public  class Monitor {
 
 	private static final String TAG = Monitor.class.getName();
-
 	public  static boolean collectMode = true;
 	public  static boolean sShowLog = true;
-	private static AtomicBoolean sStart = new AtomicBoolean(false);
-
+	static AtomicBoolean sStart = new AtomicBoolean(false);
 	//当前fragment是否为显示界面
 	private  boolean isFragmentStart = false;
-	private ClickHandle mClickHandle;
-	private String sLastPageName = "" ;   //上一页面名字
-	private String sCurrentPageName = "" ;   //当前页面名字
+	private TouchHandle mTouchHandle;
+	static String sLastPageName = "" ;   //上一页面名字
+	static String sCurrentPageName = "" ;   //当前页面名字
 
 	public  static boolean isCollectMode() {
 		return collectMode;
@@ -45,8 +46,8 @@ public  class Monitor {
 	}
 
 	private Monitor() {
-		mClickHandle = new ClickHandle();
-		mClickHandle.registerViewClickListener(myViewClickListener);
+		mTouchHandle = new TouchHandle();
+		mTouchHandle.registerViewClickListener(myViewClickListener);
 	}
 	public static Monitor getInstance() {
 		return MonitorHolder.holder;
@@ -62,7 +63,8 @@ public  class Monitor {
 		if (!collectMode)   return;  //非收集模式  退出
 		try {
 			sCurrentPageName = activity.getClass().getSimpleName();
-			onAppStart();  //应用启动时上传
+//			onAppStart();  //应用启动时上传
+			onAppStart(activity);  //应用启动时上传
 			onPageStart(activity);
 		}
 		catch (Exception e)
@@ -81,8 +83,8 @@ public  class Monitor {
 		isFragmentStart = true;
 		try {
 			String pageName =fragment.getClass().getSimpleName();
-//			LogUtils.d("collect" , fragment.getClass().getSimpleName()+"-------------------------mFragmentViews="+mClickHandle.mFragmentViews.size()+",mAllViews= "+mClickHandle.mAllViews.size());
 			sCurrentPageName = pageName;
+//			onPageStart(fragment);
 			onPageStart(fragment);
 		}
 		catch (Exception e)
@@ -117,27 +119,23 @@ public  class Monitor {
 	public  void dispatchTouchEvent(Activity activity, MotionEvent ev) {
 		if (!collectMode)   return;  //非收集模式  退出
         /*获取当前点击位置，遍历布局，获取当前点击位置对应的view，根据view映射路径，与json文件中的对比*/
-		if (mClickHandle != null){
-			mClickHandle.eventViewHit(activity,ev);
+		if (mTouchHandle != null){
+			mTouchHandle.eventViewHit(activity,ev);
 		}
 	}
 
 	public void onFragmentResume(Fragment fragment) {
 		if (!collectMode)   return;  //非收集模式  退出
 		onFragmentPageStart(fragment);
-			if (sShowLog) Log.d("collect" , fragment.getClass().getSimpleName()+"-------------------------onFragmentResume()");
-
 	}
 
 	public void onFragmentPaused(Fragment fragment) {
 		if (!collectMode)   return;  //非收集模式  退出
 		onFragmentPageEnd(fragment);
-//		if (sShowLog) Log.d("collect" , fragment.getClass().getSimpleName()+"-------------------------onFragmentPaused()");
 	}
 
 	public void onFragmentHiddenChanged(Fragment fragment, boolean hidden) {
 		if (!collectMode)   return;  //非收集模式  退出
-//		if (sShowLog) Log.d("collect" , fragment.getClass().getSimpleName()+"-------------------------onFragmentHiddenChanged() hidden = "+hidden);
 		if (!fragment.isResumed()) return;   //未初始化  退出
 		if (hidden) {
 			onFragmentPageEnd(fragment);
@@ -148,7 +146,6 @@ public  class Monitor {
 
 	public void  setUserVisibleHint(Fragment fragment, boolean isVisibleToUser) {
 		if (!collectMode)   return;  //非收集模式  退出
-//		if (sShowLog)Log.d("collect" , fragment.getClass().getSimpleName()+"-------------------------setUserVisibleHint isVisibleToUser = "+isVisibleToUser);
 		if (!fragment.isResumed()) return;   //未初始化  退出
 		if (isVisibleToUser) {
 			onFragmentPageStart(fragment);
@@ -157,7 +154,7 @@ public  class Monitor {
 		}
 	}
 
-	 ClickHandle.OnViewClickListener myViewClickListener = new ClickHandle.OnViewClickListener(){
+	 TouchHandle.OnViewClickListener myViewClickListener = new TouchHandle.OnViewClickListener(){
 
 		@Override
 		public void onButtonTouch(MotionEvent event, View view){
@@ -167,16 +164,15 @@ public  class Monitor {
 					String viewName = "";
 					String viewType = "";
 					String idName = ViewUtils.getSimpleResourceName(view.getContext(), view.getId());
-//					if (sShowLog) Log.d("collect", "研究院数据上传成功_____id= "+idName);
 					//获取文本值
 					viewName =getButtonName(view );
-//					if (sShowLog) Log.d("collect", "研究院数据上传成功____________________viewName= "+viewName);
 					//动态生成view  比如listView
 					if (view.hasOnClickListeners() && TextUtils.isEmpty(idName)){
 						idName = viewName;
 					}
 					viewType = (view instanceof EditText) ? "text": "button";
 
+//					onClickButton(idName,viewName,viewType);
 					onClickButton(idName,viewName,viewType);
 				}
 			}
@@ -212,20 +208,6 @@ public  class Monitor {
 		return viewName;
 	}
 
-	/**
-	 * 生成上传数据行为数据
-	 */
-	public void  onPageStartInner() {
-		if (sShowLog) Log.d("collect" , "uploadStr =： ");
-	}
-
-	/*
-	*点击按钮时上传的数据
-	 */
-	public void onClickButton(String idName, String viewName, String viewType) {
-		if (sShowLog) Log.d("collect" , "----view被点击 idName = "+idName+"，viewName = "+viewName+"，viewType = "+viewType);
-	}
-
 	/*
 	获取带日期的时间
 	 */
@@ -243,22 +225,28 @@ public  class Monitor {
 		return  formatter.format(curDate);
 	}
 
-	/*
-	*打开app时上传的数据
-	 */
-	public void onAppStart() {
-		if (!sStart.compareAndSet(false, true)) {
-			return;
-		}
-		if (sShowLog) Log.d("collect" , "----app被打开了 "+getFormatDate());
-//		Toast.makeText("----app被打开了 "+getFormatDate(),3).show();
-	}
-
-	/*
-	*打开页面上传的数据
-	 */
-	public  void onPageStart(Object object) {
-
-		if (sShowLog) Log.d("collect" , "----打开了新页面 "+object.getClass().getSimpleName()+"，上一页面="+sLastPageName);
-	}
+//	/*
+//	*打开app时上传的数据
+//	 */
+//	public void onAppStart() {
+//		if (!sStart.compareAndSet(false, true)) {
+//			return;
+//		}
+//		if (sShowLog) Log.d("collect" , "----app被打开了 "+getFormatDate());
+////		Toast.makeText("----app被打开了 "+getFormatDate(),3).show();
+//	}
+//
+//	/*
+//	*打开页面上传的数据
+//	 */
+//	public  void onPageStart(Object object) {
+//
+//		if (sShowLog) Log.d("collect" , "----打开了新页面 "+object.getClass().getSimpleName()+"，上一页面="+sLastPageName);
+//	}
+//	/*
+//	*点击按钮时上传的数据
+//	 */
+//	public void onClickButton(String idName, String viewName, String viewType) {
+//		if (sShowLog) Log.d("collect" , "----view被点击 idName = "+idName+"，viewName = "+viewName+"，viewType = "+viewType);
+//	}
 }
