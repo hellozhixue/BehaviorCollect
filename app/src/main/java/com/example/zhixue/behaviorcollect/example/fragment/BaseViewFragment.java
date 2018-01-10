@@ -39,7 +39,6 @@ public abstract class BaseViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         Monitor.getInstance().onFragmentResume(this);
     }
 
