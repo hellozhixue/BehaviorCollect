@@ -6,6 +6,8 @@
 package com.example.zhixue.behaviorcollect.Monitor;
 
 import android.app.Activity;
+import android.app.Application;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,12 +40,12 @@ public  class Monitor {
 	static String sLastPageName = "" ;   //上一页面名字
 	static String sCurrentPageName = "" ;   //当前页面名字
 
-	public  static boolean isCollectMode() {
-		return collectMode;
-	}
-	public  static void setCollectMode(boolean collect) {
-		collectMode = collect;
-	}
+//	public  static boolean isCollectMode() {
+//		return collectMode;
+//	}
+//	public  static void setCollectMode(boolean collect) {
+//		collectMode = collect;
+//	}
 
 	private Monitor() {
 		mTouchHandle = new TouchHandle();
@@ -51,6 +53,10 @@ public  class Monitor {
 	}
 	public static Monitor getInstance() {
 		return MonitorHolder.holder;
+	}
+	public static void init(@NonNull Application application, boolean collect ) {
+		application.registerActivityLifecycleCallbacks(new MonitorActivityLifecycleCallbacks());
+		collectMode = collect;
 	}
 
 	private static class MonitorHolder {

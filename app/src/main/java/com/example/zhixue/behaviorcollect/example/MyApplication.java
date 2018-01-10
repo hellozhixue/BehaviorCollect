@@ -3,6 +3,7 @@ package com.example.zhixue.behaviorcollect.example;
 import android.app.Application;
 import android.os.Build;
 
+import com.example.zhixue.behaviorcollect.Monitor.Monitor;
 import com.example.zhixue.behaviorcollect.Monitor.MonitorActivityLifecycleCallbacks;
 
 /**
@@ -24,7 +25,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if(Build.VERSION.SDK_INT > 14) {  //埋点统计回调监听
-            this.registerActivityLifecycleCallbacks(new MonitorActivityLifecycleCallbacks());
+            Monitor.init(this,true);
         }
 
          /*其他内容初始化*/
