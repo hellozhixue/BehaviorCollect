@@ -7,7 +7,7 @@ BehaviorCollect是自动化埋点统计用sdk,只需几行代码就可以实现�
       if(Build.VERSION.SDK_INT > 14) {  //埋点统计回调监听
                Monitor.init(this,true);
        }其中 true表示开启埋点统计功能。
-       如果想兼容14版本一下的系统  那就乖乖的和Fragment一样写BaseActivity并回调Monitor中的对应的方法了
+       如果想兼容14版本一下的系统  那就乖乖的和Fragment一样写BaseActivity并回调Monitor中的对应的方法了          
 >* 3.如果将Fragment按照界面处理时，在你的BaseFragment中（本例为BaseViewFragment）按照例子更改那四个回调函数。
     Monitor.getInstance().onFragmentResume(this);
     Monitor.getInstance().onFragmentPaused(this);
