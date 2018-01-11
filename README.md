@@ -18,6 +18,6 @@ BehaviorCollect是自动化埋点统计用sdk,只需几行代码就可以实现�
 ### 说明：
 >* 1.本例只加了开机、开启页面、按钮点击这三种事件类型，根据项目需求，可自行添加如结束页面 页面停留时间等逻辑。
 >* 2.本例只处理了点击事件中的up事件，如需抓取down事件，可自行去掉TouchHandle::eventViewHit中MotionEvent.ACTION_UP响应事件，并在myViewClickListener中加上Down事件的处理。
->* 3.对于做了混淆的应用 可根据view的调用路径来确定当前页面和view,这就需要服务端配合完成了。  
+>* 3.对于做了混淆的应用 可根据view的调用路径来确定当前页面和view,这就需要服务端配合完成了。
 
 	
