@@ -86,6 +86,10 @@ public  class Monitor {
 	public  void onFragmentPageStart(Fragment fragment) {
 		//如果当前fragment已经开始 则退出   避免重复开始
 		if (!fragment.getUserVisibleHint()||fragment.isHidden()||!fragment.isResumed()||isFragmentStart)return;
+		String pageName =fragment.getClass().getSimpleName();
+		if (sCurrentPageName.equals(pageName) ) return;//重复进入  退出
+		sLastPageName = sCurrentPageName ;
+		sCurrentPageName = pageName;
 		isFragmentStart = true;
 		try {
 			String pageName =fragment.getClass().getSimpleName();
